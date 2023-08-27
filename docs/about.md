@@ -4,15 +4,11 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+# Sai Kiran Gummaraj
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
-
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+* Skilled software engineer with knowledge of cybersecurity.
+* Skilled software engineer with experience in all the phases of SDLC.
+* Experienced with designing and developing software on Linux/UNIX environments.
+* Experienced with designing and developing applications for Cloud environments.
 
 
-[jekyll-organization]: https://github.com/jekyll
