@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2009-07-15-versant.html" />
+<meta property="og:url" content="http://localhost:4000/2009-07-15-versant.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2009-07-15-versant.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="writing-c-application-for-versant">Writing C++ Application For Versant</h2>
+
+<p>In this write up we shall see what does it take to develop applications using Versant’s Object Oriented Database. I have been involved in developing and debugging applications with Versant as the database for bit over an year and this write up is just a recap of the kind of work I have been doing with Versant using its C++ libraries. There are options to use other languages like Java, but I’ve used C++.</p>
+
+<p><strong>NOTE:</strong> This write up is only contains the approach with brief reference to its C++ API classes. It does not describe the C++ API in detail. For that you would need to get your hands on the Versant Usage Manual and Versant Reference Manual for C++.</p>
+
+<h3 id="definitions">Definitions</h3>
+
+<h4 id="firstly-what-is-an-object-oriented-database-">Firstly what is an Object Oriented database ?</h4>
+
+<p>Object Oriented database (a.k.a Object database) allows its user to represent information as Objects. The schema is created as a set of classes and the instances of the class are persisted into the database and are called objects. The advantage of using an Object database is its easy to represent classes you have designed into the database directly. You could use all the advantages of object oriented(-ness) for your database objects. You could design base classes and derive classes with more special functionality. And invoke virtual methods on the base-class (after loading them from the database) which could invoke a derived class functions. And use complex object composition to represent one object holding other objects.</p>
+
+<p><a href="http://en.wikipedia.org/wiki/Object_database">http://en.wikipedia.org/wiki/Object_database</a></p>
+
+<h3 id="some-basics-of-versant">Some Basics of Versant</h3>
+
+<p>Before we begin developing applications we need to be aware of some concepts, classes, tools, and procedures that Versant provides its users/developers.</p>
+
+<h3 id="concepts">Concepts</h3>
+
+<p>Once you have your persistent classes ready (we will see how to get these classes later). You could stream the schema into the database. And then populate them with data (object instances).</p>
+
+<h3 id="query-language">Query Language</h3>
+
+<p>All queries to the versant database are written in a propreitary query language called VQL (Versant Query Language). You could refer to the reference manual to learn about this.</p>
+
+<h3 id="internal-representation">Internal Representation</h3>
+
+<p>Each object is uniquely identified by OID (Object Identifier). An OID is a numeric string that takes the form of “dd.nn.nnnn” where dd, nn and nnnn are integers. Example –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.0.4941,
+32.36.43204 … etc.
+</code></pre></div></div>
+
+<h3 id="concept-of-transaction-and-writes">Concept of Transaction and Writes</h3>
+
+<p>When modifying the object instances in the database using the APIs, we could begin a transaction and start modifying the data, each of the data we modify we mark it as dirty. And at the end if the transaction is committed only that data which was marked dirty actually gets written to the database.</p>
+
+<h3 id="templates-and-prerequisites">Templates and Prerequisites</h3>
+
+<p>Many of the Versant’s C++ API classes makes extensive use of Templates (parameterized classes). If you are not familiar with C++ templates you could just do a quick read up on the basics of it. As we would only use the already provided template classes it shouldn’t be that hard.</p>
+
+<h3 id="types-of-objects">Types of Objects</h3>
+
+<p>Objects in versant can be</p>
+
+<ul>
+  <li>Persistent — those ones which were / can be  saved to the database.</li>
+  <li>Transient — those which only reside in memory.</li>
+  <li>Versioned Objects — Objects could be versioned. You could have a persistent object and create newer versioned objects based on the base/parent object. You could have a version tree of the objects.</li>
+</ul>
+
+<h3 id="what-versant-persistent-classes-can-encapsulate">What Versant Persistent Classes can Encapsulate?</h3>
+
+<p>Versant Persistent classes can encapsulate the portable data types that are shown below and other persistent classes, collection classes. However it cannot encapsulate enums, unions, and C style pointers or C++ references. If you want to indicate you want to refer to another class as a link, then you should use Link<type> classes of Versant.</type></p>
+
+<h3 id="important-versant-classes">Important Versant Classes</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">PObject</code>: Is the base-most class. For any persistent Versant Object. This has methods  –
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">acquirelock</code> — acquire a lock on itself,</li>
+      <li><code class="language-plaintext highlighter-rouge">as</code> — method to down-cast to a more specific derived class</li>
+      <li><code class="language-plaintext highlighter-rouge">operator new</code> — Creates a new persistent object for any sub-type. There are some helper macros for this like – O_NEW_PERSISTENT</li>
+      <li><code class="language-plaintext highlighter-rouge">delete</code> — delete itself from memory and database based on the type of object it is (destructor is called).</li>
+      <li><code class="language-plaintext highlighter-rouge">releaseobj</code> — release the object from memory.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">PVirtual</code> (inherits from <code class="language-plaintext highlighter-rouge">PObject</code>) : This class has methods for hashing and searching.</li>
+  <li><code class="language-plaintext highlighter-rouge">VDate</code>, <code class="language-plaintext highlighter-rouge">VTime</code> – Represent date and time</li>
+  <li><code class="language-plaintext highlighter-rouge">VString</code> – Represent strings.</li>
+  <li><code class="language-plaintext highlighter-rouge">VCollection</code> – Template class representing base of various collections. Some of the popular collection classes are –</li>
+  <li><code class="language-plaintext highlighter-rouge">VEArray&lt;T&gt; VEList&lt;T&gt; VIList&lt;T&gt; VESet&lt;T&gt; VISet&lt;T&gt; VEDictionary&lt;K,V&gt; VIDictionary&lt;K,V&gt;</code> etc. These are all template classes.</li>
+  <li><code class="language-plaintext highlighter-rouge">PDOM</code> – This is an important class that you would use quite often in programming. PDOM has methods that perform database operations such as –
+    <ul>
+      <li>beginsession (i.e. begin a transaction)</li>
+      <li>abort (abort transaction)</li>
+      <li>commit()</li>
+      <li>connectdb()</li>
+      <li>createdb()
+and many many more…</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">VSession</code> (extends PDOM)  – This class has all the useful methods that operate on the database. PDOM is on the deprecation list and VSession will take its place.</li>
+  <li>PClass / PClassObject<type> – To operate on Class (i.e. OODBMs Table equivalent), you could use these classes PClass and PClassObject. These classes contains methods like –
+</type>    <ul>
+      <li>createIndex – create various types of Indexes</li>
+      <li>dropIndex – delete the index on the class.</li>
+      <li>select – equivalent to SELECT query. To query data. It uses PPredicate class which is used to specify conditions.</li>
+    </ul>
+  </li>
+  <li>PClassObject<type> – is just a templatized wrapper over PClass. It has some methods to extract the PClass’s object pointer, reference etc. You can call all PClass methods and it would be directed to the PClass <type> it wraps around.</type></type></li>
+  <li>Link Classes (Link<type>) – Link is like a persistent pointer. It is represented by the OID (Object Identifier discussed above). There many kinds of Link variants available –</type></li>
+  <li>Link<type> – Link to the particular “type” (or subtype ofcourse).</type></li>
+  <li>LinkAny – Link to any type (like a <code class="language-plaintext highlighter-rouge">void*</code>).</li>
+  <li>LinkVstr<type> – Represents a collection of links to type (array of pointers of type).</type></li>
+  <li>LinkVstrAny – Represents a collection of links to any type (like an array of <code class="language-plaintext highlighter-rouge">void*</code>).</li>
+</ul>
+
+<p>These have many helper methods (<code class="language-plaintext highlighter-rouge">operator-&gt;</code>, <code class="language-plaintext highlighter-rouge">operator*</code>, <code class="language-plaintext highlighter-rouge">operator==</code> etc.) to convert them to c-style pointers/addresses while writing code. They also have methods to check if the link is NULL, set it to NULL etc. You could invoke many of the PObjects methods aswell.</p>
+
+<ul>
+  <li>Vstr classes – These unlike the LinkVstr types store the actual objects. The types are Vstr<type>, VstrAny.</type></li>
+  <li>VString/PString – Represents strings. Many functions similar to std strings. This cannot be used as a independed / standalone persistent class by itself. But can be used as an attribute (i.e. like the column of a table) of the class. There are helper overrides that easily convert to and from <code class="language-plaintext highlighter-rouge">char*</code>.</li>
+</ul>
+
+<p>Container (extends PObect) Class – This class allows its user to operate on a set of heterogeneous objects. If I understand right, a container is more like a view in the RDBMS world but a bit different in the following ways –</p>
+
+<ul>
+  <li>This allows user to operate on a set of objects at once. Retrivals are faster.</li>
+  <li>User can put locks on the entire container thus locking all the objects in the container.</li>
+  <li>Write the container’s contents to the database (provided no one else has obtained locks on the objects).</li>
+</ul>
+
+<p>Container classes needs to have a unique name in the database.</p>
+
+<p>Some of the methods a container has are – add(), remove(), read(), write(), load() etc.</p>
+
+<p>Collection Classes – Like discussed above, collection classes fall under the category of Array, List, Set and Dictionary. There is a separate iterator (V{collectiontype}Iterator for e.g. VIDictionaryIterator) class available to iterate over the collection. Each of the collections have classes like VEArray, VIArray, and VVArray (similarly dictionary and list and set).</p>
+
+<ul>
+  <li>E -&gt; Content of the collection is an element (VElemental)</li>
+  <li>I -&gt; Content of the collection is a identity (i.e. Link)</li>
+  <li>V -&gt; Content of the collection is a Value (by value).</li>
+</ul>
+
+<p>So comparisions are done on each of these types.</p>
+
+<p>Versant Portable Datatypes / Type definitions</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>o_1b &lt;–&gt; char (1 byte)
+o_2b &lt;–&gt; short (2 bytes)
+o_4b &lt;–&gt; int (4 bytes)
+o_float, o_double,
+o_date, o_time, o_timestamp
+</code></pre></div></div>
+
+<p>There are some unsigned versions for the above mentioned types. Refer to the manual for details.</p>
+
+<p>The notes so far gives us a fair idea of the classes that are involved for developing applications using Versant as the DB.</p>
+
+<p>Now lets get a birds eye view of the steps involved in writing code, compiling them, generating schema, etc. So we will see the complete cycle for developing the application –</p>
+
+<p><img src="/assets/images/versant.png" alt="Flowchart" /></p>
+
+<p>Now lets perform the steps mentioned in the flowchart above with a small example. We will see how do we write the C++ code, compile it, generate schema and finally create a database and upload the schema to the database.</p>
+
+<p>Lets consider “Employee” to be the entity of our discussion –</p>
+
+<p>I would follow the convention of naming persistent classes suffixed with a <code class="language-plaintext highlighter-rouge">_p</code>. So our employee entity would be Employee_p.</p>
+
+<p>Lets say <code class="language-plaintext highlighter-rouge">Employee_p</code> fields are –</p>
+
+<p><code class="language-plaintext highlighter-rouge">id</code> – Employee id
+<code class="language-plaintext highlighter-rouge">name</code> – Employee name
+<code class="language-plaintext highlighter-rouge">address</code> – Employee address
+<code class="language-plaintext highlighter-rouge">joining_date</code> – Employee joining date</p>
+
+<p>Lets begin by writing the C++ code for the persistent class.</p>
+
+<h4 id="employee_ph">Employee_p.h</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#ifndef _EMPLOYEE_P_H_
+#define _EMPLOYEE_P_H_
+
+#include &lt;cxxcls/pobject.h&gt;
+#include &lt;cxxcls/vtime.h&gt;
+
+class Employee_p : public PObject
+{
+	public:
+		Employee_p();
+		Employee_p(Employee_p&amp;);
+
+		virtual ~Employee_p();
+
+		static LinkVstr&lt;Employee_p&gt; find();
+		static LinkVstr&lt;Employee_p&gt; find(const o_4b empid);
+
+		o_4b id;
+		PString name;
+		PString address;
+		VTime joining_date;
+		O_TS_TIMESTAMP;
+};
+
+#endif // _EMPLOYEE_P_H_
+</code></pre></div></div>
+
+<h4 id="employee_pcpp">Employee_p.cpp</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include “Employee_p.h”
+
+Employee_p::Employee_p() {
+	VPP_CLASS_CONSTRUCTOR1(Employee_p);
+}
+
+Employee_p::Employee_p(Employee_p&amp;) {
+	VPP_CLASS_CONSTRUCTOR1(Employee_p);
+}
+
+Employee_p::~Employee_p() {}
+
+LinkVstr&lt;Employee_p&gt; Employee_p::find() {
+	return PClassObject&lt;Employee_p&gt;::Object().select(NULL, FALSE, NULL_PREDICATE);
+}
+
+LinkVstr&lt;Employee_p&gt; Employee_p::find(const o_4b empid) {
+	returnPClassObject&lt;Employee_p&gt;::Object().select(NULL, FALSE,
+	PPredicate(PAttribute(“Employee_p::id”) == empid));
+}
+</code></pre></div></div>
+
+<p>Now lets create a database so that we could upload the generated schema –</p>
+
+<p>$ makedb -g -logging -locking -promptpasswd testdb</p>
+
+<p>Now create an entry in the osc-db file for the database testdb</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ dbid -c -t2 testdb
+</code></pre></div></div>
+
+<p>The above command would prompt you for the DBA password which you could set. And create a database.</p>
+
+<p><code class="language-plaintext highlighter-rouge">oscp</code> — command prints versant db configuration paths, etc.</p>
+
+<p>Next we write the schema file –</p>
+
+<h4 id="schemaimp">Schema.imp</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include “Employee_p.h”
+
+O_CAPTURE_SCHEMA ( Employee_p );
+</code></pre></div></div>
+
+<p>Now compile the schema file using the ‘schcomp’ file as follows –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ schcomp -I`oscp -d`/h Schema.imp
+</code></pre></div></div>
+
+<p>The above command would generate the following files –</p>
+
+<p>schema.sch – This would be uploaded into the database.
+schema.cxx – This would be linked with your application.
+To upload the schema.sch into the database testdb use the following command –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sch2db -y -D testdb schema.sch
+</code></pre></div></div>
+
+<p>The above command would upload the class/entity into the database. You could use the object inspector to view the classes.</p>
+
+<p>Some of the frequently used commands in versant –</p>
+
+<h3 id="create-a-database">Create a database</h3>
+
+<p>$ makedb -p -logging -locking -promptpasswd <DatabaseName></DatabaseName></p>
+
+<p><code class="language-plaintext highlighter-rouge">-p</code> : Personal database
+<code class="language-plaintext highlighter-rouge">-logging</code> : Enable logging
+<code class="language-plaintext highlighter-rouge">-locking</code> : Enable locking
+<code class="language-plaintext highlighter-rouge">-promptpasswd</code> : Prompt for DBA password
+<code class="language-plaintext highlighter-rouge">&lt;DatabaseName&gt;</code> : Name of your database.</p>
+
+<p>Database configurations can be changed by altering the contents of profile.be file.</p>
+
+<h3 id="removedelete-a-database">Remove/Delete a database</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$ removedb -f -rmdir &lt;DatabaseName&gt;</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">-f</code> : Force remove
+<code class="language-plaintext highlighter-rouge">-rmdir</code> : Remove its associated files on the disk.
+<code class="language-plaintext highlighter-rouge">&lt;DatabaseName&gt;</code> : Name of your database.</p>
+
+<h3 id="start-a-database-instance">Start a database instance</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$ startdb &lt;DatabaseName&gt;</code></p>
+
+<h3 id="stop-a-database-instance">Stop a database instance</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ stopdb -f &lt;DatabaseName&gt;
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-f</code> : forcefully shutdown the database</p>
+
+<h3 id="backup-or-restore-a-database">Backup or Restore a database</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ vbackup -dev &lt;path_to_backup_file_name&gt; -backup &lt;DatabaseName&gt;
+</code></pre></div></div>
+
+<p>The above command will backup the database specified to the <code class="language-plaintext highlighter-rouge">&lt;path_to_backup_file_name&gt;</code> specified.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ vbackup -dev &lt;path_to_backup_filename&gt; -restore &lt;DatabaseName&gt; -rename &lt;DifferentRestoreName&gt;
+</code></pre></div></div>
+
+<p>The above command restores the database from the backup file into DifferentRestoreName. If rename is not specified then it restores it under the name it was backed-up.</p>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

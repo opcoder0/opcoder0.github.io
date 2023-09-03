@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2009-02-13-xerces.html" />
+<meta property="og:url" content="http://localhost:4000/2009-02-13-xerces.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2009-02-13-xerces.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="build-steps-xerces-270-and-xalan-110-64-bit-using-visual-studio-2005-vc8">Build Steps: Xerces 2.7.0 and Xalan 1.10 (64-bit) Using Visual Studio 2005 (VC8)</h2>
+
+<p>Building a 64-bit Xerces 2.7.0 and Xalan 1.10 is a set of additional steps to “Build Instructions : Xerces 2.7.0 and Xalan 1.10 (32-bit) Using Visual Studio 2008 / VC++ 8”.</p>
+
+<p>Read my blog on that for full instructions to build them using 32-bit settings.</p>
+
+<p>Xerces 2.7.0 Build Instructions</p>
+
+<p>And for building the Xerces 2.7.0 in x64 mode perform the following steps –</p>
+
+<ol>
+  <li>Open the xerces-all.sln file under VC8 folder (that was created under 32-bit build).</li>
+  <li>Add new configuration setting; You could name it something like — “Release_x64”. Copy settings from “Release”.</li>
+  <li>Add a new platform “x64” also have been added. Copy settings from Win32.</li>
+  <li>For the “Release_x64” &lt;–&gt;  “x64” configuration setting, make sure you change all build output paths to win_x64 from Win32.</li>
+  <li>Goto project properties dialog of XercesLib project. Here add “Win64” as a pre-processor definition. This is needed for compliation to go through successfully in 64-bit mode.</li>
+  <li>Now compile the XercesLib project. This should compile without any errors and generate the dlls required.</li>
+</ol>
+
+<p>Output files are generated under <code class="language-plaintext highlighter-rouge">XERCESCROOT\build\win_x64\vc8\release</code></p>
+
+<p>For 32-bit builds use the “Release” configuration with Win32 platform settings.</p>
+
+<h3 id="xalan-110-build-instructions">Xalan 1.10 Build Instructions</h3>
+
+<p>To start with open the  Xalan.sln – Create new Configuration settings “Release_x64” copied from Release and “x64” machine setting copied from Win32.</p>
+
+<p>Under <code class="language-plaintext highlighter-rouge">XALANROOT\Projects\Win32\VC8\Utils</code> under the 3 folders “Localization”, “MsgCreator” and “XalanMsgLib” make changes to the .mak files to incorporate x64 build and build settings. If you would like to download the entire package of Xalan 1.10 sources modified for x64 settings in the way I’ve described here, then you could pick it up from my box.net share.</p>
+
+<p><strong>NOTE:</strong> Original Win64 settings in Xalan caters to IA64 build, I have changed it so that it can be used for x64. Alternatively you could create a new setting altogether for x64 in which case you would have to modify things in many other places like visual studio settings etc.</p>
+
+<p>Build only the localization project from visual studio. This should create all the necessary files under</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>XALANROOT\build\win_x64\vc8\release
+</code></pre></div></div>
+
+<p>In “AllInOne” project change the build settings (C++ and Linker) sections to make it point to <code class="language-plaintext highlighter-rouge">Win_x64</code> directories instead of Win32.</p>
+
+<p>Then build “AllInOne” project. This should then create the xalan libraries in 64-bit mode.</p>
+
+<p><strong>NOTE</strong> Take a look my box.net share here <a href="https://app.box.com/folder/24145340">https://app.box.com/folder/24145340</a> and download the xerces 2.7.0 and xalan 1.10 which can be compiled in both 32 and 64 bit configurations.</p>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

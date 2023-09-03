@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2009-10-15-eclipse-tcl-tk.html" />
+<meta property="og:url" content="http://localhost:4000/2009-10-15-eclipse-tcl-tk.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2009-10-15-eclipse-tcl-tk.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="configure-eclipse-as-tcltk-ide">Configure Eclipse As TCL/TK IDE</h2>
+
+<p>To configure Eclipse as a TCL/TK IDE you would need the plugin DLTK (Dynamic Language Toolkit). Information on DLTK is available <a href="http://www.eclipse.org/dltk/">http://www.eclipse.org/dltk/</a></p>
+
+<p>DLTK supports other scripting languages such as PERL, PHP, TCL/TK etc. Things you would need to setup TCL/TK Eclipse IDE –</p>
+
+<ul>
+  <li>Eclipse 3.4 or greater: Java or JavaEE IDE</li>
+  <li>DLTK</li>
+  <li>TCL/TK</li>
+  <li>Komodo Remote Debugger</li>
+</ul>
+
+<p>Steps to follow are –</p>
+
+<ul>
+  <li>Download and install Eclipse 3.4 or greater from eclipse.org (install the Java or JavaEE IDE).</li>
+  <li>To install the DLTK, in your eclipse IDE navigate the menu item “Help &gt; Software Updates…”, or “Help &gt; Install New Software…” to install plugins/updates.</li>
+  <li>Add this as the update site for DLTK – <a href="http://download.eclipse.org/technology/dltk/updates-dev/1.0/">http://download.eclipse.org/technology/dltk/updates-dev/1.0/</a></li>
+  <li>After the site has been added it would show the list of plugins available under DLTK. Choose the following –
+    <ul>
+      <li>Dynamic Language Toolkit – Core Frameworks</li>
+      <li>Dynamic Language Toolkit – Core Frameworks SDK</li>
+      <li>Dynamic Language Toolkit – iTCL Development Tools</li>
+      <li>Dynamic Language Toolkit – iTCL Development Tools SDK</li>
+      <li>Dynamic Language Toolkit – TCL Development Tools</li>
+      <li>Dynamic Language Toolkit – TCL Development Tools SDK</li>
+      <li>Dynamic Language Toolkit – XOTcl Development Tools</li>
+      <li>Dynamic Language Toolkit – XOTcl Development Tools SDK</li>
+    </ul>
+  </li>
+  <li>After you have selected all the above packages and agreed to the license agreement, install them.</li>
+  <li>After the install of the components, eclipse will re-start and the TCL environment (perspectives, windows etc.) would have been configured into eclipse.</li>
+  <li>Now download and install TCL Shell and interpreter itself. For Windows, you can download it from ActiveState <a href="http://www.activestate.com/activetcl/">http://www.activestate.com/activetcl/</a> and for Linux download it from www.tcl.tk/software/tcltk/</li>
+  <li>After you have installed TCL in your preferred path/location; Open Eclipse IDE and follow the menu option “Window &gt; Preferences &gt; TCL“; Click on “Interpreters“, click Add button on the right, enter interpreter name as “TCL” and click “Browse..” and choose the path to the Tcl interpreter executable. Click OK and save the setting.</li>
+  <li>Now you are done. You can write and run TCL programs via Eclipse.</li>
+  <li>To debug your Tcl programs you would need to install the Komodo remote debugger.</li>
+  <li>You can download Komodo from activestate – <a href="http://aspn.activestate.com/ASPN/Downloads/Komodo/RemoteDebugging">http://aspn.activestate.com/ASPN/Downloads/Komodo/RemoteDebugging</a></li>
+  <li>Install the above software under a directory of your choice.</li>
+  <li>Now, open eclipse, and navigate to the following menu option “Window &gt; Preferences &gt; TCL”, expand TCL and then choose “Debug &gt; Engines &gt; Active State”. Under the “Paths” tab, select the “Path:” dropdown and under “External Debugging Engine” select browse and choose the executable for komodo remote debugger (for windows it would be dbgp_tcldebug.exe). Click OK and save the setting.</li>
+  <li>Now you are all set. You should be able to choose new TCL project, write your Tcl code and debug your programs.</li>
+</ul>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

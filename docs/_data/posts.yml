@@ -2,7 +2,7 @@
   link: /2017-04-13-ceph.html
 - name: Ubuntu Black Screen After Update To Saucy Salamander [2013-09-02]
   link: /2013-09-02-ubuntu.html
-- name: Configuring USB 3G Modem on Linux
+- name: Configuring USB 3G Modem on Linux [2011-12-22]
   link: /2011-12-22-3g-modem-linux.html
 - name: How To Setup ReviewBoard on Ubuntu [2011-05-31]
   link: /2011-05-31-reviewboard.html
@@ -24,3 +24,19 @@
   link: /2009-11-20-vc6-err.html
 - name: Extended Attributes On MacOS X And File Transfer [2009-11-07]
   link: /2009-11-07-macos-xattr.html
+- name: Configure Eclipse As TCL/TK IDE [2009-10-15]
+  link: /2009-10-15-eclipse-tcl-tk.html
+- name: Writing C++ Application for Versant [2009-07-15]
+  link: /2009-07-15-versant.html
+- name: Starteam Ant Extension (Check-in With Task ID) [2009-04-06]
+  link: /2009-04-06-starteam-ant.html
+- name: Building Visual Studio 2005 Project Via Apache Continuum [2009-02-25]
+  link: /2009-02-25-vs2005.html
+- name: Build Steps - Xerces 2.7.0 and Xalan 1.10 (64-bit) Using Visual Studio 2005 (VC8) [2009-02-13]
+  link: /2009-02-13-xerces.html
+- name: Build Steps - Xerces 2.7.0 and Xalan 1.10 (32-bit) Using Visual Studio 2005 (VC8) [2009-02-09]
+  link: /2009-02-09-xerces-build.html
+- name: Multi-threading and malloc [2008-12-19]
+  link: /2008-12-19-malloc-solaris.html
+- name: Shared Libraries in AIX and Global Shared Library Area [2008-12-19]
+  link: /2008-12-19-aix.html

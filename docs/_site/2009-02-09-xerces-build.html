@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2009-02-09-xerces-build.html" />
+<meta property="og:url" content="http://localhost:4000/2009-02-09-xerces-build.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2009-02-09-xerces-build.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="build-steps---xerces-270-and-xalan-110-32-bit-using-visual-studio-2005-vc8">Build Steps - Xerces 2.7.0 and Xalan 1.10 (32-bit) Using Visual Studio 2005 (VC8)</h2>
+
+<p>I read numerous posts and mailing list threads before I could figure out how to build Xalan 1.10 with Xerces 2.7.0 on Windows 32-bit OS using Visual Studio 2005 (VC 8).</p>
+
+<p>There are bits and pieces of instructions here and there which add up. But I thought none of them were complete and easily accessible.</p>
+
+<p>So thought of composing the instruction set here.</p>
+
+<h3 id="instructions-for-building-xerces-270">Instructions for Building Xerces 2.7.0</h3>
+
+<ol>
+  <li>First of all get the Xerces 2.7.0 sources from the apache xerces-c archive page here <a href="http://archive.apache.org/dist/xml/xerces-c/Xerces-C_2_7_0/">http://archive.apache.org/dist/xml/xerces-c/Xerces-C_2_7_0/</a>. Goto ‘source’ folder and download xerces-c-src_2_7_0.zip.</li>
+  <li>Extract it under a suitable location on your machine. (Say – C:\dev).</li>
+  <li>Under the extract, goto – (C:\dev) \xerces-c-src_2_7_0\Projects\Win32\</li>
+  <li>Open the solution file under Projects\Win32\VC7.1\xerces-all.sln. The Visual Studio 2005 will ask if the solution can be upgraded. Use the wizard to upgrade the solution.</li>
+  <li>Now in the opened solution, make sure you choose “Release” build.</li>
+  <li>Right-click on ‘XercesLib’ and click Build.</li>
+  <li>This should build the project without any errors. You will be able to see the built files under – (C:\dev) xerces-c-src_2_7_0\Build\Win32\VC7.1\Release. The Xerces DLL and .lib files can be found here.</li>
+</ol>
+
+<p><strong>Note:</strong> Unlike the instructions in given in Nabble, I have’nt changed the project setting (XercesLib Project Properties -&gt; C++ -&gt; Language -&gt; “Treat wchar_t as built-in type”) to “No”. I have left it as the default which is “Yes”.</p>
+
+<p>Above steps will complete the Xerces 2.7.0 build.</p>
+
+<h3 id="instructions-for-building-xalan-110">Instructions for Building Xalan 1.10</h3>
+
+<p><strong>Xalan needs initial setup : Instructions for that here</strong></p>
+
+<p>Now before building Xalan, set your <code class="language-plaintext highlighter-rouge">XERCESCROOT</code> environmental variable to the location where you’ve successfully built Xerces-C above (i.e. – C:\dev\xerces-c-src_2_7_0).</p>
+
+<p>NOTE – My build instructions won’t work if you download the Xalan-C sources from apache download site. In order to build Xalan 1.10 with Xerces 2.7.0 you need some fixes in Xalan. And these fixes can be applied only on the SVN revision number 357825.</p>
+
+<ol>
+  <li>Setup a SVN client, I chose Tortoise SVN. You can download it from here. Tortoise SVN integrates into Windows explorer. So choose an appropriate check-out (SVN update) location for the Xalan sources.  Like say – C:\dev\xml-xalan.</li>
+  <li>Now Open Windows Explorer, choose ‘xml-xalan’ and perform a source checkout from the SVN Xalan Trunk. The trunk URL is – http://svn.apache.org/repos/asf/xalan/c/trunk</li>
+  <li>Now Right-click on ‘xml-xalan’ folder, choose “Tortoise SVN” -&gt; “Update to revision” menu option. This will pop-up a dialog and ask you to provide the revision of the checkout. Here enter the revision number 357825.</li>
+  <li>This will checkout the entire tree with the required set of sources of Xalan 1.10. Now to this you will have to apply a source patch found under Apache Xalan’s JIRA case – http://issues.apache.org/jira/browse/XALANC-584. Download the patch file (patch.txt) from there and save it on your machine. Rename it to xalan.patch.</li>
+  <li>Now, in windows explorer, right-click on (C:\dev\xml-xalan) “xml-xalan” folder and choose “Tortoise SVN” -&gt; “Apply Patch…” menu item. This will ask for the patch file. Choose the patch file xalan.patch downloaded previously. This will open the Tortoise Merge for each of the sources changes. Save the merged / patched file.</li>
+</ol>
+
+<p>Now, we can build the Xalan 1.10 properly with Xerces 2.7.0.</p>
+
+<ol>
+  <li>Now, open Xalan solution file using Visual Studio 2005 from under your extract or if you are following the above path structure then it would be – C:\dev\xml-xalan\Projects\Win32\VC7.1. Visual Studio will try to perform an upgrade. Follow the wizard and complete the upgrade.</li>
+  <li>Make sure you’ve chosen “Release” configuration for Xalan.</li>
+  <li>I’ll again follow only some steps from Hans Smit’s instructions on Nabble.</li>
+  <li>Here, goto C:\dev\xml-xalan\Projects\Win32\VC7.1\Utils\Localization and edit ‘tools.ini’. Comment out [NMAKE].</li>
+  <li>Then, in BuildMessages.mak under the same location as tools.ini Add the line “include tools.ini”. Added it to the top of the file.</li>
+  <li>Now in Visual Studio 2005, right-click on “Localization” project and say build. This should build the MsgCreator.exe without issues.</li>
+  <li>Now right-click on “AllInOne” and say build. This should build the Xalan libraries.</li>
+</ol>
+
+<p>Hope this helps !.</p>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>
