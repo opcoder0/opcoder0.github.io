@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2011-05-31-reviewboard.html" />
+<meta property="og:url" content="http://localhost:4000/2011-05-31-reviewboard.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2011-05-31-reviewboard.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="how-to-setup-reviewboard-on-ubuntu">How To Setup ReviewBoard on Ubuntu</h2>
+
+<p>This post provides a series of steps and commands that is required to setup and configure reviewboard server on your Ubuntu OS. Having reviewboard to post and track changes and reviews is really awesome. Well of-course reviewboard documentation has done a wonderful job of describing everything needed. I had to open a few other sites (like MySQL and some forums) to complete the steps successfully. I stumbled upon a few errors while I was setting up reviewboard and I’ve added steps on how I got around them and got it up and running.</p>
+
+<p>I have a Ubuntu 10.10 running on a system on which I’ve setup reviewboard. You could put these in a script and it would work –</p>
+
+<p>There are some pre-requisites –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install firefox
+sudo apt-get install mysql-server
+sudo apt-get install libmysqlclient-dev
+sudo apt-get install apache2
+sudo apt-get install libapache2-mod-python
+sudo apt-get install python-setuptools
+sudo apt-get install python-dev  # (re-starts the machine to complete setup)
+sudo apt-get install memcached
+sudo apt-get install patch
+</code></pre></div></div>
+
+<p>All of reviewboard components and python modules can be installed using setuptools (easy_install)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo easy_install python-memcached
+sudo easy_install ReviewBoard
+sudo easy_install mysql-python
+sudo easy_install python-mysqldb
+</code></pre></div></div>
+
+<p>Am setting this up for subversion. Installing subversion and the python-svn (source control components)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install subversion
+sudo apt-get install python-svn
+</code></pre></div></div>
+
+<p>In order to setup / configure reviewboard you’ll need a MySQL database (I’ve chosen MySQL, you could choose others listed on reviewboard site). So run the following command –</p>
+
+<p><code class="language-plaintext highlighter-rouge">mysql –user=root –password=”your passwd here” mysql</code></p>
+
+<p>Create the reviewboard database of your choice. At the mysql prompt type</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; CREATE DATABASE {your-database-name-here};
+</code></pre></div></div>
+
+<p>At the mysql prompt create a reviewboard user and grant it all permissions.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; CREATE USER ‘rbuser’@’localhost’ IDENTIFIED BY ‘your_password’;
+mysql&gt; GRANT ALL PRIVILEGES ON *.* TO ‘rbuser’@’localhost’ WITH GRANT OPTION;
+</code></pre></div></div>
+
+<p>Now run the configuration command rb-site install to configure your review board server</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo rb-site install /var/www/your.review-site.com
+sudo chown -R www-data:www-data /var/www/your.review-site.com
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">rb-site install</code> is going to ask you a lot of questions, which you should be able to answer since it would be your choices and specific to your environment. Remember your reviewboard admin credentials which will be required later.</p>
+
+<p><strong>NOTE:</strong> Apache runs as <code class="language-plaintext highlighter-rouge">www-data</code> user on my Ubuntu. If you don’t change the owner and group of <code class="language-plaintext highlighter-rouge">/var/www/your.review-site.com</code> to <code class="language-plaintext highlighter-rouge">www-data:www-data</code>, Apache won’t have the right permissions to add the source control repository. This is required because, you would have to upload your changed files and reviewboard should be able to detect the difference between what is in the source repository vs. the file you’ve submitted.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /etc/apache2/sites-available
+cp /var/www/your.review-site.com/conf/apache-modpython.conf your.review-site.com.conf
+cd ../sites-enabled
+sudo ln -s ../sites-available/your.review-site.com.conf .
+</code></pre></div></div>
+
+<p>And you’re done !</p>
+
+<p>With this, you have a review board setup. Based on the questions you’ve answered (hopefully with correct details) visit reviewboard link http://&lt;your.rb.hostname&gt;:<port>/dashboard</port></p>
+
+<p>As an admin you’ll have to add your source control repository URL in to your reviewboard environment. Login to your reviewboard server as ‘admin’. Click on the “Add” link next to “Repositories” in the “Database” tab. In this window, fill-up the Source control details. And click ‘Save’.</p>
+
+<p><strong>NOTE-1:</strong> If you’ve forgotten to run the chown command command above to set the owner to www-data on /var/www/your.review-site.com/ reviewboard cannot create the configuration.</p>
+
+<p><strong>NOTE-2:</strong> If you get an error saying unable to create .subversion directory under /var/www/your.review-site.com/data, then create it manually.</p>
+
+<p>Once you’ve added your source repository successfully, the setup is complete. Users of reviewboard need to create their accounts and login to reviewboard. To post new reviews, users would need post-review (part of RBTools). This is a tool that allows you to post review from your source control using command line. This tool is available for Linux, Windows and MacOS. This can be installed by running <code class="language-plaintext highlighter-rouge">easy_install -U RBTools</code></p>
+
+<p>For users to start using the tool (in case of SVN). In your SVN checked-out directory set a property using –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>svn propset reviewboard:url http://&lt;your.rb.hostname&amp;gt;:&lt;port&gt;/
+post-review –user=&lt;your-username&gt; –password=&lt;your-passwd&gt; -p
+</code></pre></div></div>
+
+<p>This should post this for review !</p>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

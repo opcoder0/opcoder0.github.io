@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2010-06-03-vnc-linux.html" />
+<meta property="og:url" content="http://localhost:4000/2010-06-03-vnc-linux.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2010-06-03-vnc-linux.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="how-to-configure-vnc-server-on-linux">How To Configure VNC Server On Linux</h2>
+
+<p>I had a Linux box (RHEL 5.4 X64) to which I only had Telnet &amp; SSH access. And I wanted a full screen export to test some GUI. So here is what I learnt and did to enable VNC and get a full screen export to the GNOME environment.</p>
+
+<p>Make sure you have installed a VNC server on the box. You could download TightVNC source and compile it on your Linux box.</p>
+
+<ul>
+  <li>First login to the machine as root (via telnet/SSH).</li>
+  <li>Edit the following file <code class="language-plaintext highlighter-rouge">/etc/sysconfig/vncservers</code> and add lines with the following syntax/format</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VNCSERVERS=”n:username”
+VNCSERVERARGS[n]=”arguments here”
+</code></pre></div></div>
+
+<p>For example to enable a VNC access for root user on display 2, you would enter the following lines</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VNCSERVERS=”2:root”
+VNCSERVERARGS[2]=”-geometry 800×600″
+</code></pre></div></div>
+
+<p>The above entries will enable root user to login to VNC display 2, with a screen resolution of 800 x 600.</p>
+
+<p>As root run the command /usr/bin/vncpasswd; Enter and confirm the VNC login password to be used by the client.
+Then Edit the /etc/X11/xorg.conf and add the following lines to the end of the file –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Section “Module”
+Load “glx”
+Load “dbe”
+Load “extmod”
+Load “freetype”
+Load “type1”
+Load “dri”
+Load “vnc”
+EndSection
+</code></pre></div></div>
+
+<p><strong>NOTE:</strong> Press Enter after “EndSection” then save &amp; quit the file.</p>
+
+<p>If the firewall on Linux (iptables) is enabled and running then it is likely that the ports that VNC uses (5900 – 590x) are blocked.
+Open those ports by running “system-config-securitylevel” at the root prompt (#). In the (curses type) CUI that appears on the screen, click on “Customize” button and in the “Allow incoming” section in the “Other ports” textfield, add “5900-5904:tcp”. Save and exit the application.
+You will then have to enable VNCServer for a particular run-level. And here is how you can check and enable them
+chkconfig –list vncserver # This list the displays enabled/disabled status (from run-level 0 to 6).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chkconfig –level 3 vncserver on
+</code></pre></div></div>
+
+<p>Now start the VNC service by typing “service vncserver start“. This should start the VNC server on your machine on display 2 for root user.
+At this point you can VNC to the server, but you will by default get a TWM window manager (which just has a X-Windows bash prompt). Which is not good enough. So to enable GNOME or KDE,
+Now edit the file $HOME/.vnc/xstartup, Un-comment the following lines –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unset SESSION_MANAGER
+exec /etc/X11/xinit/xinitrc
+</code></pre></div></div>
+
+<p>At the end of the file, replace “twm &amp;” with “startx &amp;” for GNOME and “startkde &amp;” for KDE.</p>
+
+<p>Re-start your VNC service with <code class="language-plaintext highlighter-rouge">"service vncserver restart"</code>.</p>
+
+<p>With this you are all set. You can install a Tight VNC client on your Windows or any other box and then connect to display 2, by typing your machines IP followed by :2. For example – 192.168.3.130:2</p>
+
+<p>Thanks to these links from where I gathered the above info 🙂</p>
+
+<ul>
+  <li><a href="http://www.skullbox.net/vncserver.php">http://www.skullbox.net/vncserver.php</a></li>
+  <li><a href="http://www.linuxquestions.org/questions/linux-newbie-8/vnc-server-no-displays-configured-629501/">http://www.linuxquestions.org/questions/linux-newbie-8/vnc-server-no-displays-configured-629501/</a></li>
+</ul>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

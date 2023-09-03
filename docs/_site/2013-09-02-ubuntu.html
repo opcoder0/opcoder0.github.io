@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2013-09-02-ubuntu.html" />
+<meta property="og:url" content="http://localhost:4000/2013-09-02-ubuntu.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2013-09-02-ubuntu.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="ubuntu-black-screen-after-update-to-saucy-salamander">Ubuntu Black Screen After Update To Saucy Salamander</h2>
+
+<h3 id="symptom">Symptom:</h3>
+
+<p>You have recently updated packages on your Ubuntu distribution and are seeing a black screen post the Plymouth splash screen. The alternate consoles are not enabled. But the system responds to Ctrl-Alt-Del.</p>
+
+<h3 id="cause">Cause:</h3>
+
+<p>This could mean that the update of the Xserver packages did not happen correctly. The update removes the following packages</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xserver-xorg-video-ati
+xserver-xorg-video-tdfx
+xserver-xorg-video-trident
+xserver-xorg-video-fbdev
+xserver-xorg-video-mga
+xserver-xorg-video-r128
+xserver-xorg-video-vesa
+xserver-xorg-video-siliconmotion
+xserver-xorg-video-mach64
+xserver-xorg-video-sis
+xserver-xorg-video-s3
+xserver-xorg-video-savage
+xserver-xorg-video-nouveau
+xserver-xorg-video-neomagic
+xserver-xorg-video-sisusb
+xserver-xorg-video-radeon
+xserver-xorg-video-cirrus
+xserver-xorg-video-intel
+</code></pre></div></div>
+
+<h3 id="solution">Solution:</h3>
+
+<p>This can be corrected by entering recovery mode with networking enabled and typing the following command –</p>
+
+<p><code class="language-plaintext highlighter-rouge">sudo apt-get -f install</code></p>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

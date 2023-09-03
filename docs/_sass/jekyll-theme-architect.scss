@@ -23,6 +23,7 @@ a:hover {
   color: #2268b2;
 }
 
+
 header {
   padding-top: 40px;
   padding-bottom: 40px;
@@ -73,6 +74,21 @@ header h2 {
   max-width: 100%;
 }
 
+#main-table table {
+  width: 100%;
+  border: 0px solid #ffffff;
+}
+
+#main-table th {
+  font-weight: 500;
+}
+
+#main-table td {
+  font-weight: 300;
+  text-align: center;
+  border: 0px solid #ffffff;
+}
+
 aside#sidebar {
   float: right;
   width: 200px;
@@ -84,6 +100,20 @@ aside#sidebar {
 aside#sidebar p.repo-owner,
 aside#sidebar p.repo-owner a {
   font-weight: bold;
+}
+
+a.active {
+  font-family: 'Architects Daughter';
+  font-size: 24px;
+  line-height: 1.5;
+  color: #2e7bcf;
+}
+
+a.inactive {
+  font-family: 'Architects Daughter';
+  font-size: 24px;
+  line-height: 1.5;
+  color: #000;
 }
 
 #downloads {
@@ -159,21 +189,6 @@ hr {
   margin-bottom: 1em;
   border: 0;
   border-top: solid 1px #ddd;
-}
-
-table {
-  width: 100%;
-  border: 1px solid #ebebeb;
-}
-
-th {
-  font-weight: 500;
-}
-
-td {
-  font-weight: 300;
-  text-align: center;
-  border: 1px solid #ebebeb;
 }
 
 form {

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2011-12-22-3g-modem-linux.html" />
+<meta property="og:url" content="http://localhost:4000/2011-12-22-3g-modem-linux.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2011-12-22-3g-modem-linux.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="configuring-usb-3g-modem-on-linux">Configuring USB 3G Modem on Linux</h2>
+
+<p>I was in the process of configuring my USB 3G broadband modem with my Linux boxes and was interested to find out all about Linux’s USB serial interface and drivers etc. So I’ve kind of assimilated all the information below along with the links for those of you who want to read them.</p>
+
+<p>Its fairly simple to configure any (or most) of the USB modems in Linux. But you’ll need to know some details about it first. You would need to find out</p>
+
+<p>– Username (this could be your SIM card’s phone number)
+– Password (this could be your SIM card’s phone number)
+– Phone Number (Which number to dial. Example: #777)</p>
+
+<p>Before you connect you will need to write <code class="language-plaintext highlighter-rouge">/etc/wvdial.conf</code> You can read the man page of <code class="language-plaintext highlighter-rouge">wvdial.conf</code> and write everything by hand or run <code class="language-plaintext highlighter-rouge">sudo wvdialconf</code> on your computer. Linux probes for details of the device and generates <code class="language-plaintext highlighter-rouge">wvdial.conf</code> with some information. It could look like something below —</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Dialer Defaults]
+Init2 = ATQ0 V1 E1 S0=0 &amp;C1 &amp;D2 +FCLASS=0
+Modem Type = Analog Modem
+; Phone = &lt;Target Phone Number&gt;
+ISDN = 0
+; Username = &lt;Your Login Name&gt;
+Init1 = ATZ
+; Password = &lt;Your Password&gt;
+Modem = /dev/ttyUSB0
+Baud = 9600
+</code></pre></div></div>
+
+<p>You will then need to fill up the rest of the details such as (a sample) –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Dialer Defaults]
+Modem = /dev/ttyUSB0
+Init1 = ATZ
+Init2 = ATQ0 V1 E1 S0=0 &amp;C1 &amp;D2 +FCLASS=0
+CBaud = 460800
+Stupid Mode = 1
+Modem Type = Analog Modem
+Phone = *99#
+New PPPD = yes
+ISDN = 0
+Username = &lt;Your Username&gt;
+Password = &lt;Your Password&gt;
+Baud = 9600
+
+</code></pre></div></div>
+
+<p>Save and quit the above file and then run “sudo wvdial” with the device plugged and you should be online after that.</p>
+
+<p>Some internal information –</p>
+
+<p>USB modem <a href="http://en.wikipedia.org/wiki/Modem">http://en.wikipedia.org/wiki/Modem</a></p>
+
+<p>USB wireless modem use a USB port on the laptop instead of a PC card or ExpressCard slot. Most of the wireless modems come with an integrated SIM cardholder (Huawei E220, Sierra 881, etc.) and some models also provided a microSD memory slot and/or jack for additional external antenna such as Huawei E1762 and Sierra Wireless Compass 885.</p>
+
+<p>USB modems work in Linux with kernel versions 2.6.20 and greater. Its development started in 2.5. This article on Linux Journal explains about USB Serial implementation in the linux kernel in detail.</p>
+
+<p>It needs support for <code class="language-plaintext highlighter-rouge">/dev/ttyUSB*</code> devices. See this link in wikipedia for more information <a href="https://en.wikipedia.org/wiki/Huawei_E220">https://en.wikipedia.org/wiki/Huawei_E220</a>. You can use wvdial to connect via this USB modem.</p>
+
+<p><code class="language-plaintext highlighter-rouge">wvdial</code> (See wikipedia link <a href="https://en.wikipedia.org/wiki/Wvdial">https://en.wikipedia.org/wiki/Wvdial</a> is a dial-up utility available for Linux OSes.</p>
+
+<p><code class="language-plaintext highlighter-rouge">wvdial</code> initializes the modem and executes the dial up instructions based on what is specified in <code class="language-plaintext highlighter-rouge">wvdial.conf</code> (See <code class="language-plaintext highlighter-rouge">man wvdial.conf</code>) to find out what to write in that file. Or you can plugin the USB modem and run wvdialconf (as root or sudo) and that detects and generates the <code class="language-plaintext highlighter-rouge">/etc/wvdial.conf</code> file.</p>
+
+<h3 id="resources">RESOURCES</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Modem">https://en.wikipedia.org/wiki/Modem</a>
+<a href="https://forum.openwrt.org/viewtopic.php?id=19171">https://forum.openwrt.org/viewtopic.php?id=19171</a>
+<a href="https://en.wikipedia.org/wiki/Wvdial#cite_note-0">https://en.wikipedia.org/wiki/Wvdial#cite_note-0</a>
+<a href="https://wiki.archlinux.org/index.php/USB_3G_Modem">https://wiki.archlinux.org/index.php/USB_3G_Modem</a>
+<a href="https://www.mjmwired.net/kernel/Documentation/usb/usb-serial.txt">https://www.mjmwired.net/kernel/Documentation/usb/usb-serial.txt</a>
+<a href="https://www.linux-usb.org/">https://www.linux-usb.org/</a>
+<a href="https://www.linuxjournal.com/article/6434?page=0,2">https://www.linuxjournal.com/article/6434?page=0,2</a>
+<a href="https://www.linux-usb.org/devices.html">https://www.linux-usb.org/devices.html</a>
+<a href="https://cateee.net/lkddb/web-lkddb/USB_SERIAL.html">https://cateee.net/lkddb/web-lkddb/USB_SERIAL.html</a></p>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Opcoder0 Blog Posts | Technical Articles and Blog Posts</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Opcoder0 Blog Posts" />
+<meta name="author" content="opcoder0" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical Articles and Blog Posts" />
+<meta property="og:description" content="Technical Articles and Blog Posts" />
+<link rel="canonical" href="http://localhost:4000/2009-11-30-gdb-wingdb.html" />
+<meta property="og:url" content="http://localhost:4000/2009-11-30-gdb-wingdb.html" />
+<meta property="og:site_name" content="Opcoder0 Blog Posts" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Opcoder0 Blog Posts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"opcoder0"},"description":"Technical Articles and Blog Posts","headline":"Opcoder0 Blog Posts","url":"http://localhost:4000/2009-11-30-gdb-wingdb.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="http://localhost:4000/">
+          <h1>Opcoder0 Blog Posts</h1>
+        </a>
+        <h2>Technical Articles and Blog Posts</h2>
+        
+        
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="gdb-vs-wingdb-commands">GDB vs. WINGDB Commands</h2>
+
+<p>I have always enjoyed working on Unix/Linux environments makes me feel at home. Off late I had to debug a crash on windows and used WinDbg for it. I liked WinDbg for the fact that it is command driven and is similar to GDB. So am tempted to compare and record the options available in the two debuggers here. This post, discusses only debugging tools available for user mode debugging and not kernel mode debuggers.</p>
+
+<p>First and foremost, for any source level meaningful debugging to work at you should have compiled your code in debug mode. Use -g flag on Unix/Linux or generate PDB file on windows using compiler flag /ZI.</p>
+
+<p>Procedure to create a dump (core-dump) file in Windows using WinDbg or analyzing a crash –</p>
+
+<p>Execute the command below –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; cscript.exe adplus.vbs -crash -sc C:\path\to\your\executable.exe
+</code></pre></div></div>
+
+<p><strong>Note:</strong> <code class="language-plaintext highlighter-rouge">adplus.vbs</code> resides under the WinDbg install location.</p>
+
+<p>If your program crashes, the above command dumps core under your WinDbg install location under CrashDump folder. This can be a good way to examine the stack trace of a program if it crashes during startup.</p>
+
+<p>Type the kb command in your windbg debugger command after executing the above command to view the stack trace of the crash or run the other windbg commands below to continue execution if the program didn’t crash during startup.</p>
+
+<p>To dump core at a specific location in your program, type the command at your break point or line of your choice in windbg –</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.dump /mfh C:\path\of\yourchoice\myfile.dmp
+</code></pre></div></div>
+
+<p>Here are a list of various useful commands that come in handy</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Command / Option description</th>
+      <th>GDB Command</th>
+      <th>WinGDB Command / UI Op</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Enabling post-mortem default debug</td>
+      <td>N/A</td>
+      <td><code class="language-plaintext highlighter-rouge">windbg -I</code>; <code class="language-plaintext highlighter-rouge">drwtsn32 -i</code></td>
+    </tr>
+    <tr>
+      <td>Invoking Debugger with core file / dump core</td>
+      <td><code class="language-plaintext highlighter-rouge">gdb &lt;exec&gt; &lt;core-file&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Windbg -y SymbolPath -i ImagePath -z DumpFileName &lt;exe&gt;</code></td>
+    </tr>
+    <tr>
+      <td>Attaching to a Running Process</td>
+      <td><code class="language-plaintext highlighter-rouge">gdb &lt;executable&gt; &lt;pid&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">windbg -p &lt;pid&gt;</code></td>
+    </tr>
+    <tr>
+      <td>Repeat Last Command</td>
+      <td>Hit enter key</td>
+      <td>Hit enter key</td>
+    </tr>
+    <tr>
+      <td>Display debugger command(s) while performing GUI operations in the debugger</td>
+      <td>N/A</td>
+      <td><code class="language-plaintext highlighter-rouge">.bpcmds</code></td>
+    </tr>
+    <tr>
+      <td>Enabling Source level debugging</td>
+      <td><code class="language-plaintext highlighter-rouge">break &lt;line&gt;</code> <code class="language-plaintext highlighter-rouge">break &lt;source&gt;:line</code> <code class="language-plaintext highlighter-rouge">break funcname</code> <code class="language-plaintext highlighter-rouge">break class::func</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bp @@masm(FileName:LineNumber+)</code></td>
+    </tr>
+    <tr>
+      <td>Execute program to a breakpoint or end of execution</td>
+      <td><code class="language-plaintext highlighter-rouge">run</code> or <code class="language-plaintext highlighter-rouge">r</code></td>
+      <td><code class="language-plaintext highlighter-rouge">go</code> or <code class="language-plaintext highlighter-rouge">g</code></td>
+    </tr>
+    <tr>
+      <td>Step over to next instruction</td>
+      <td><code class="language-plaintext highlighter-rouge">next</code></td>
+      <td><code class="language-plaintext highlighter-rouge">p</code></td>
+    </tr>
+    <tr>
+      <td>Step into function / method</td>
+      <td><code class="language-plaintext highlighter-rouge">step</code></td>
+      <td><code class="language-plaintext highlighter-rouge">t</code></td>
+    </tr>
+    <tr>
+      <td>Display Variable Contents</td>
+      <td><code class="language-plaintext highlighter-rouge">print var_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dv var_name</code></td>
+    </tr>
+    <tr>
+      <td>Dump Memory Contents</td>
+      <td><code class="language-plaintext highlighter-rouge">dump</code></td>
+      <td><code class="language-plaintext highlighter-rouge">d</code><code class="language-plaintext highlighter-rouge">{a|b|c|d|D|f|p|q|u|w|W}</code></td>
+    </tr>
+    <tr>
+      <td>Display Stack Frame</td>
+      <td><code class="language-plaintext highlighter-rouge">bt &lt;number-of-stack-frame&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">kc</code> or <code class="language-plaintext highlighter-rouge">k[b|p|P|v] [c] [n] [f] [L] [Frame Count]</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>More to follow on threads and other sub-commands.</p>
+
+	  <hr/>
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+	  <nav>
+    <br/><br/><br/>
+    
+    <a href="/"  class="inactive" > Home </a><br/>
+    
+    <a href="/about.html"  class="inactive" > About </a><br/>
+    
+    <a href="/post.html"  class="inactive" > Blogs </a><br/>
+    
+</nav>
+
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>
