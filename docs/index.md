@@ -50,9 +50,7 @@ layout: default
 </h3>
 </td>
 <td>
-<h3>
 <img src="/assets/images/fanotify.jpeg">
-</h3>
 </td>
 </tr>
 </table>
