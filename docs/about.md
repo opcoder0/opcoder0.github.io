@@ -82,6 +82,7 @@ layout: default
 **HP Cloud OS**
 - Refactored HP Cloud OS bare metal deployments (built around OpenStack Grizzly)
 - Configured OpenStack Neutron for HP Cloud OS bare metal environments.
+
 **Technologies:** `Python, Bridging, Open vSwitch`
 
 **HP Client Automation OS Manager**
@@ -134,7 +135,7 @@ layout: default
 **Technologies:** `C++, STL, IPC, pthreads, Java, GDB, strace, truss, lsof`
 
 ### Software Engineer, Hewlett Packard, India Software Operations, Bangalore
-**December 2004 - August 2004**
+**December 2000 - August 2004**
 
 - Ported Tuxedo Smart Plugin (SPI) for HP Open View to Solaris, AIX and Tru64
 - Designed and Developed Smart Plugins for Web Methods 6.0 and 6.1
