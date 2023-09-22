@@ -2,6 +2,10 @@
   <ul>
     {% for item in site.data.articles %}
     <a href="{{ item.link }}" {% if page.url == item.link %}class="active"{% endif %}> {{ item.name }} </a><br/>
+    <div class="box">
+        <iframe src="{{ item.link }}" width="500px" height="500px">
+        </iframe>
+    </div>
     {% endfor %}
   </ul>
 </nav>
