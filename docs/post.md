@@ -2,4 +2,4 @@
 layout: postindex
 ---
 
-## Blog Posts
+## Notes | Posts
